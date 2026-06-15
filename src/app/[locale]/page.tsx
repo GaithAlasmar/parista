@@ -137,11 +137,33 @@ export default async function HomePage({
       />
 
       <footer
-        className="pb-8 text-center text-[11px]"
+        className="pb-4 text-center text-[11px]"
         style={{ color: "var(--text-subtle)" }}
       >
         {dict.footerNote}
       </footer>
+
+      {/* ── Signature Footer ────────────────────────────────────────────── */}
+      <div className="mx-auto mb-12 mt-4 flex max-w-2xl flex-col items-center justify-center gap-6 border-t border-gray-200 dark:border-gray-800 pt-8 md:flex-row">
+        {/* Glow Container */}
+        <div className="relative">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-500 to-amber-700 opacity-50 blur"></div>
+          <img
+            src="/gaith-signature.png"
+            alt="Eng. Gaith Alasmar"
+            className="relative z-10 h-20 w-20 rounded-full border-2 border-amber-600 object-cover shadow-2xl"
+          />
+        </div>
+        
+        {/* Text Container */}
+        <div className="text-center md:text-left">
+          <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400">Crafted with Passion by</p>
+          <h2 className="mt-1 text-3xl font-extrabold text-gray-900 dark:text-white">
+            <span className="text-amber-500">Eng.</span> Gaith Alasmar <span aria-hidden>☕</span>
+          </h2>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-500">PWA Digital Artisan | Jordan</p>
+        </div>
+      </div>
     </div>
   );
 }
