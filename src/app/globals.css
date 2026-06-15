@@ -1,26 +1,273 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
+
+/* ─── Design Tokens — Bar-Authentic Palette ─────────────────────────────────── */
+/*
+  Sourced from physical bar photos:
+  • Off-white stone back-wall    → #F4F0E8
+  • Dark Granite counter         → #1C1C20
+  • Matte Brass / Gold poles     → #B8943A
+  • Casadio brushed steel grey   → #6B7280
+  • Glass shelves (transparent)  → rgba(255,255,255,0.4)
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Raw palette */
+  --stone-100:    #FAF8F3;   /* lightest — almost white */
+  --stone-200:    #F4F0E8;   /* main background — off-white wall */
+  --stone-300:    #EAE5D8;   /* surface variant */
+  --stone-400:    #D6CEBC;   /* dividers */
+  --granite-900:  #1C1C20;   /* dark granite — primary text */
+  --granite-700:  #3A3A42;   /* secondary text */
+  --granite-500:  #5A5A66;   /* muted text */
+  --granite-300:  #9A9AA8;   /* placeholder / disabled */
+  --brass-600:    #B8943A;   /* matte gold / accent — main */
+  --brass-400:    #D4AE56;   /* lighter gold — hover states */
+  --brass-200:    #EDD98A;   /* very light gold — shimmer highlight */
+  --brass-800:    #8A6C22;   /* deep gold — pressed states */
+  --steel:        #6B7280;   /* Casadio grey — decorative */
+
+  /* Semantic tokens */
+  --bg:           var(--stone-200);
+  --bg-surface:   var(--stone-300);
+  --bg-card:      rgba(255, 255, 255, 0.5);
+  --text:         var(--granite-900);
+  --text-muted:   var(--granite-500);
+  --text-subtle:  var(--granite-300);
+  --accent:       var(--brass-600);
+  --accent-light: var(--brass-400);
+  --border:       rgba(184, 148, 58, 0.22);
+  --border-stone: rgba(28, 28, 32, 0.10);
+  --glass-blur:   16px;
+  --radius-card:  18px;
+
+  --bg-glass: rgba(244, 240, 232, 0.88);
+  --bg-glass-solid: rgba(255, 255, 255, 0.55);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --bg:           #0F0F12;
+  --bg-surface:   #1C1C20;
+  --bg-card:      rgba(28, 28, 32, 0.7);
+  --text:         #F9FAFB;
+  --text-muted:   #D1D5DB;
+  --text-subtle:  var(--granite-500);
+  --border-stone: rgba(255, 255, 255, 0.10);
+  --bg-glass:     rgba(15, 15, 18, 0.88);
+  --bg-glass-solid: rgba(28, 28, 32, 0.7);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Base ───────────────────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 18px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  /* Subtle stone texture via layered radial gradients */
+  background-image:
+    radial-gradient(ellipse 120% 60% at 15% 0%, rgba(184,148,58,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 80% at 85% 100%, rgba(184,148,58,0.04) 0%, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: "Outfit", var(--font-geist-sans), system-ui, sans-serif;
+  min-height: 100dvh;
 }
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 4px; }
+::-webkit-scrollbar-track  { background: var(--stone-300); }
+::-webkit-scrollbar-thumb  { background: var(--brass-600); border-radius: 2px; }
+
+/* ─── Glass Card (frosted-glass shelf effect) ────────────────────────────────── */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 2px 8px rgba(28,28,32,0.06),
+    0 0 0 1px var(--border),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+  border-radius: var(--radius-card);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 36px rgba(28,28,32,0.10),
+    0 0 0 1px rgba(184,148,58,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.95);
+  border-color: rgba(184,148,58,0.5);
+}
+
+/* ─── Gold / Brass button ────────────────────────────────────────────────────── */
+.btn-gold {
+  background: linear-gradient(135deg, var(--brass-600) 0%, var(--brass-400) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-weight: 600;
+  box-shadow: 0 2px 12px rgba(184,148,58,0.30);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-gold:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(184,148,58,0.40);
+}
+
+.btn-gold:active {
+  transform: scale(0.97);
+  opacity: 0.90;
+}
+
+/* ─── Stone surface ──────────────────────────────────────────────────────────── */
+.stone-surface {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-stone);
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.7; transform: scale(0.96); }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.10s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.20s; }
+.stagger-5 { animation-delay: 0.25s; }
+
+/* ─── Brass gradient text ────────────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--brass-800)  0%,
+    var(--brass-600) 30%,
+    var(--brass-200) 55%,
+    var(--brass-600) 75%,
+    var(--brass-800) 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ─── Card hover glow (for non-glass elements) ───────────────────────────────── */
+.card-glow {
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.card-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(184,148,58,0.18);
+  border-color: rgba(184,148,58,0.50);
+}
+
+/* ─── Brass divider line ─────────────────────────────────────────────────────── */
+.brass-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--border) 30%,
+    rgba(184,148,58,0.4) 50%,
+    var(--border) 70%,
+    transparent 100%
+  );
+}
+
+/* ─── Typography: Prose overrides — light stone theme ───────────────────────── */
+.recipe-prose {
+  --tw-prose-body:          var(--granite-700);
+  --tw-prose-headings:      var(--brass-600);
+  --tw-prose-lead:          var(--granite-500);
+  --tw-prose-links:         var(--brass-600);
+  --tw-prose-bold:          var(--granite-900);
+  --tw-prose-counters:      var(--brass-600);
+  --tw-prose-bullets:       var(--brass-600);
+  --tw-prose-hr:            var(--border-stone);
+  --tw-prose-quotes:        var(--granite-700);
+  --tw-prose-quote-borders: var(--brass-600);
+  --tw-prose-captions:      var(--granite-500);
+  --tw-prose-code:          var(--brass-800);
+  --tw-prose-pre-code:      var(--granite-900);
+  --tw-prose-pre-bg:        var(--stone-300);
+  --tw-prose-th-borders:    var(--border-stone);
+  --tw-prose-td-borders:    var(--border-stone);
+}
+
+.dark .recipe-prose {
+  --tw-prose-body:          var(--stone-200);
+  --tw-prose-headings:      var(--brass-400);
+  --tw-prose-lead:          var(--stone-300);
+  --tw-prose-links:         var(--brass-400);
+  --tw-prose-bold:          var(--stone-100);
+  --tw-prose-counters:      var(--brass-400);
+  --tw-prose-bullets:       var(--brass-400);
+  --tw-prose-hr:            rgba(255, 255, 255, 0.10);
+  --tw-prose-quotes:        var(--stone-200);
+  --tw-prose-quote-borders: var(--brass-400);
+  --tw-prose-captions:      var(--stone-400);
+  --tw-prose-code:          var(--brass-400);
+  --tw-prose-pre-code:      var(--stone-100);
+  --tw-prose-pre-bg:        var(--granite-900);
+  --tw-prose-th-borders:    rgba(255, 255, 255, 0.10);
+  --tw-prose-td-borders:    rgba(255, 255, 255, 0.10);
+}
+
+/* ─── Inventory badge (Monin / Gia / Casadio branding pills) ─────────────────── */
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(184,148,58,0.10);
+  color: var(--brass-800);
+  border: 1px solid var(--border);
+}
+
+/* ─── Phase 7: Search input placeholder colour ───────────────────────────────── */
+input[type="search"]::placeholder,
+input[type="text"]::placeholder {
+  color: var(--text-muted);
+}
+
+/* Remove browser default search-cancel button (we have our own) */
+input[type="search"]::-webkit-search-cancel-button { display: none; }
+input[type="search"]::-webkit-search-decoration  { display: none; }
+
+/* ─── Phase 7: Scrollable category pill row — hide the scrollbar visually ───── */
+.pills-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE / Edge legacy */
+}
+.pills-scroll::-webkit-scrollbar { display: none; }  /* Chrome / Safari */
